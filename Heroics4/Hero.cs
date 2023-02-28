@@ -37,6 +37,38 @@ namespace Heroics4
             Console.Write(_look);
         }
 
+        public void Move(char move) 
+        {
+            switch (move) 
+            {
+                case 'w':
+                    if (_y > 1) 
+                    {
+                        _y -= 1;
+                    }
+                    break;
+                case 'd':
+                    if (_x < 119) 
+                    {
+                        _x += 1;
+                    }
+                    break;
+                case 's':
+                    if (_y < 19) 
+                    {
+                        _y += 1;
+                    }
+                    break;
+                case 'a':
+                    if (_x > 41) 
+                    {
+                        _x -= 1;
+                    }
+                    break;
+                    default: break;
+            }
+        }
+
         public virtual void Fight(Hero hero) { }
 
         public int GetHp() => _hp;

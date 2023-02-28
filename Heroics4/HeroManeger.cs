@@ -18,7 +18,7 @@ namespace Heroics4
         public PLayer()
         {
             _hero = new List<Hero>();
-            _money = 40;
+            _money = 30;
         }
 
         public bool GetWhich() => _which;
@@ -152,7 +152,7 @@ namespace Heroics4
             }
         }
 
-        private void CheckDied(int number, bool whichPl) 
+        private void CheckDied(int number, bool whichPl)
         {
             if (whichPl)
             {
@@ -162,7 +162,7 @@ namespace Heroics4
                     _player1.GetHero()[number].SetLive(true);
                 }
             }
-            else 
+            else
             {
                 if (_player2.GetHero()[number].GetHp() <= 0)
                 {
@@ -222,6 +222,21 @@ namespace Heroics4
             }
         }
 
+        private void Vinner()
+        {
+            if (!CheckDied(_player1) && !CheckDied(_player2))
+            {
+                Console.WriteLine("Ничья");
+            }
+            else if (CheckDied(_player1))
+            {
+                Console.WriteLine("ВЫйграл 1 игрок!!!!!");
+            }
+            else if (CheckDied(_player2))
+            {
+                Console.WriteLine("ВЫйграл 2 игрок!!!!!!!!!!!!!");
+            }
+        }
         #endregion
 
         #region WriteField
@@ -296,6 +311,47 @@ namespace Heroics4
             PLayerChoose(_player2.GetMoney(), _player2.GetHero(), 2);
         }
 
+        private bool CheckDied(PLayer player)
+        {
+            for (int i = 0; i < player.GetHero().Count; i++)
+            {
+                if (!player.GetHero()[i].GetLive())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void PlayerActions(PLayer player, int num) 
+        {
+            bool check = num == 1? true: false;
+
+            for(int i = 0; i < 2; i++) 
+            {
+                Draw();
+                Console.SetCursorPosition(0, 0);
+                int act = InputInt($"Действия: \n1: Ходить\n2: Атаковать\nВыберите действие за {num} персонажа: ");
+
+                switch (act) 
+                {
+                    case 2:
+                        Console.Clear();
+
+                        Draw();
+
+                        Console.SetCursorPosition(0, 0);
+                        Console.WriteLine($"Атыкует {num} игрок");
+                        FightHero(check);
+
+                        Console.Clear();
+                        break;
+
+                }
+            }
+        }
+
         public void Play()
         {
             ChoosHeroes();
@@ -303,22 +359,28 @@ namespace Heroics4
 
             Draw();
             WriteIndicators();
+
             Console.SetCursorPosition(80, 10);
             Console.WriteLine("Нажмите enter что бы продолжить");
+
             Console.ReadLine();
             Console.Clear();
 
-            while (_player1.GetHero().Count != 0 && _player2.GetHero().Count != 0)
+            while (CheckDied(_player1) && CheckDied(_player2))
             {
                 Draw();
 
-                Console.SetCursorPosition(0, 0);
+                //Console.SetCursorPosition(0, 0);
+                //Console.WriteLine("Атыкует 1 игрок");
+                //FightHero(true);
 
-                Console.WriteLine("Атыкует 1 игрок");
-                FightHero(true);
+                //Console.WriteLine("Атыкует 2 игрок");
+                //FightHero(false);
 
-                Console.WriteLine("Атыкует 2 игрок");
-                FightHero(false);
+                PlayerActions(_player1, 1);
+                Console.Clear();
+
+                PlayerActions(_player2, 2);
 
                 Console.Clear();
                 WriteIndicators();
@@ -329,23 +391,7 @@ namespace Heroics4
                 Console.Clear();
             }
 
-            if (_player1.GetHero().Count != 0 && _player2.GetHero().Count != 0)
-            {
-
-                if (_player1.GetHero().Count != 0)
-                {
-                    Console.WriteLine("ВЫйграл 1 игрок!!!!!");
-                }
-
-                if (_player2.GetHero().Count != 0)
-                {
-                    Console.WriteLine("ВЫйграл 2 игрок!!!!!!!!!!!!!");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Ничья!!!!!!!!!!!!!!!!");
-            }
+            Vinner();
         }
         #endregion
     }
