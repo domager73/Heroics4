@@ -10,30 +10,30 @@ namespace Heroics4
     {
         private int _armor;
 
-        public Knight(int armor,int x, int y) : base(16, 4, x, y, 'K')
+        public Knight(int armor,int x, int y) : base(16, 4, x, y, 'K', 8)
         {
             _armor = armor;
         }
 
         public override void Fight(Hero hero)
         {
-            if (_damage >= hero.GetHp())
+            if (this.GetDamage() >= hero.GetHp())
             {
                 hero.SetLive(true);
                 _armor = 3;
             }
             else
             {
-                hero.SetHp(hero.GetHp() - _damage);
+                hero.SetHp(hero.GetHp() - this.GetDamage());
             }
 
-            if (hero.GetDamage() > _hp + _armor)
+            if (hero.GetDamage() > this.GetHp() + _armor)
             {
                 this.SetLive(true);
             }
             else
             {
-                this.SetHp(hero.GetHp() - _damage);
+                this.SetHp(hero.GetHp() - this.GetDamage() - _armor);
                 _armor -= 1;
             }
         }

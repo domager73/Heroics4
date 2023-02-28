@@ -10,30 +10,30 @@ namespace Heroics4
     {
         private int _adHp;
 
-        public Golem(int adHp, int x, int y) : base(15, 5, x, y, 'G')
+        public Golem(int adHp, int x, int y) : base(15, 5, x, y, 'G', 8)
         {
             _adHp = adHp;
         }
 
         public override void Fight(Hero hero)
         {
-            if (_damage >= hero.GetHp())
+            if (this.GetDamage() >= hero.GetHp())
             {
                 hero.SetLive(true);
                 _adHp += 1;
             }
             else
             {
-                hero.SetHp(hero.GetHp() - _damage);
+                hero.SetHp(hero.GetHp() - this.GetDamage());
             }
 
-            if (hero.GetDamage() > _hp + _adHp)
+            if (hero.GetDamage() >= this.GetHp() + _adHp)
             {
                 this.SetLive(true);
             }
             else
             {
-                this.SetHp(hero.GetHp() - _damage);
+                this.SetHp(hero.GetHp() - this.GetDamage() - _adHp);
                 _adHp -= 1;
             }
         }

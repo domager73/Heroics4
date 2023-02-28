@@ -10,31 +10,22 @@ namespace Heroics4
     {
         private int _adBush;
 
-        public Archer(int adBush, int x, int y) : base(10, 7, x, y, 'A')
+        public Archer(int adBush, int x, int y) : base(10, 7, x, y, 'A', 100)
         {
             _adBush = adBush;
         }
 
         public override void Fight(Hero hero)
         {
-            if (_damage >= hero.GetHp())
+            if (this.GetDamage() + _adBush >= hero.GetHp())
             {
                 hero.SetLive(true);
                 _adBush += 10;
             }
             else
             {
-                hero.SetHp(hero.GetHp() - _damage);
-                _adBush += _damage / 2;
-            }
-
-            if (hero.GetDamage() > _hp)
-            {
-                this.SetLive(true);
-            }
-            else
-            {
-                this.SetHp(hero.GetHp() - _damage);
+                hero.SetHp(hero.GetHp() - this.GetDamage() - _adBush);
+                _adBush += this.GetDamage() / 2;
             }
         }
     }
