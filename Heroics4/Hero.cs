@@ -37,29 +37,29 @@ namespace Heroics4
             Console.Write(_look);
         }
 
-        public void Move(char move) 
+        public void Move(ConsoleKey move) 
         {
             switch (move) 
             {
-                case 'w':
+                case ConsoleKey.W:
                     if (_y > 1) 
                     {
                         _y -= 1;
                     }
                     break;
-                case 'd':
+                case ConsoleKey.D:
                     if (_x < 119) 
                     {
                         _x += 1;
                     }
                     break;
-                case 's':
+                case ConsoleKey.S:
                     if (_y < 19) 
                     {
                         _y += 1;
                     }
                     break;
-                case 'a':
+                case ConsoleKey.A:
                     if (_x > 41) 
                     {
                         _x -= 1;

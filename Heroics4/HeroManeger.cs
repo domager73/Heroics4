@@ -1,13 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Heroics4
+﻿namespace Heroics4
 {
     class PLayer
     {
@@ -18,7 +9,7 @@ namespace Heroics4
         public PLayer()
         {
             _hero = new List<Hero>();
-            _money = 30;
+            _money = 15;
         }
 
         public bool GetWhich() => _which;
@@ -296,11 +287,6 @@ namespace Heroics4
             }
         }
 
-        private void Draw()
-        {
-            WriteField();
-        }
-
         #endregion
 
         #region LogicMethods
@@ -326,28 +312,48 @@ namespace Heroics4
 
         private void PlayerActions(PLayer player, int num) 
         {
-            bool check = num == 1? true: false;
+            bool check = num == 1;
 
             for(int i = 0; i < 2; i++) 
             {
-                Draw();
+                WriteField();
                 Console.SetCursorPosition(0, 0);
                 int act = InputInt($"Действия: \n1: Ходить\n2: Атаковать\nВыберите действие за {num} персонажа: ");
 
                 switch (act) 
                 {
+                    case 1:
+                        Console.Clear();
+
+                        WriteField();
+
+                        Console.SetCursorPosition(0, 0);
+                        Console.WriteLine($"Игрок под номером {num} Ходите");
+
+                        int activePlayer = InputInt("Введите номер героя каким вы будете ходить: ");
+
+                        for(int j = 0; j < 5; j++)
+                        {
+                            WriteField();
+                            ConsoleKey move = Console.ReadKey().Key;
+
+                            player.GetHero()[activePlayer].Move(move);
+
+                            Console.Clear();
+                        }
+                        break;
+
                     case 2:
                         Console.Clear();
 
-                        Draw();
+                        WriteField();
 
                         Console.SetCursorPosition(0, 0);
-                        Console.WriteLine($"Атыкует {num} игрок");
+                        Console.WriteLine($"Атакует {num} игрок");
                         FightHero(check);
 
                         Console.Clear();
                         break;
-
                 }
             }
         }
@@ -357,7 +363,7 @@ namespace Heroics4
             ChoosHeroes();
             Console.Clear();
 
-            Draw();
+            WriteField();
             WriteIndicators();
 
             Console.SetCursorPosition(80, 10);
@@ -368,19 +374,15 @@ namespace Heroics4
 
             while (CheckDied(_player1) && CheckDied(_player2))
             {
-                Draw();
-
-                //Console.SetCursorPosition(0, 0);
-                //Console.WriteLine("Атыкует 1 игрок");
-                //FightHero(true);
-
-                //Console.WriteLine("Атыкует 2 игрок");
-                //FightHero(false);
+                WriteField();
 
                 PlayerActions(_player1, 1);
                 Console.Clear();
+                if (CheckDied(_player1) && CheckDied(_player2)) break;
 
                 PlayerActions(_player2, 2);
+                Console.Clear();
+                if (CheckDied(_player1) && CheckDied(_player2)) break;
 
                 Console.Clear();
                 WriteIndicators();
