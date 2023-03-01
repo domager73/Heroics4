@@ -330,7 +330,7 @@
                         Console.SetCursorPosition(0, 0);
                         Console.WriteLine($"Игрок под номером {num} Ходите");
 
-                        int activePlayer = InputInt("Введите номер героя каким вы будете ходить: ");
+                        int activePlayer = InputInt("Введите героя каким ходить: ");
 
                         for(int j = 0; j < 5; j++)
                         {
