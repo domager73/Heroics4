@@ -378,11 +378,11 @@
 
                 PlayerActions(_player1, 1);
                 Console.Clear();
-                if (CheckDied(_player1) && CheckDied(_player2)) break;
+                if (CheckDied(_player1) || CheckDied(_player2)) break;
 
                 PlayerActions(_player2, 2);
                 Console.Clear();
-                if (CheckDied(_player1) && CheckDied(_player2)) break;
+                if (CheckDied(_player1) || CheckDied(_player2)) break;
 
                 Console.Clear();
                 WriteIndicators();
