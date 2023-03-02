@@ -50,7 +50,7 @@ namespace Heroics4
                 case ConsoleKey.D:
                     if (_x < 119) 
                     {
-                        _x += 1;
+                        _x += 4;
                     }
                     break;
                 case ConsoleKey.S:
@@ -62,7 +62,7 @@ namespace Heroics4
                 case ConsoleKey.A:
                     if (_x > 41) 
                     {
-                        _x -= 1;
+                        _x -= 4;
                     }
                     break;
                     default: break;

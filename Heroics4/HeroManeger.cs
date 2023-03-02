@@ -9,7 +9,7 @@
         public PLayer()
         {
             _hero = new List<Hero>();
-            _money = 15;
+            _money = 100;
         }
 
         public bool GetWhich() => _which;
@@ -59,6 +59,26 @@
 
         #region SupportMethods
 
+        private int InputInt(string msg, int max, int min)
+        {
+            bool inputReault;
+            int number;
+
+            Console.Write(msg);
+
+            do
+            {
+                inputReault = int.TryParse(Console.ReadLine(), out number);
+
+                if (min > number || number > max)
+                {
+                    inputReault = false;
+                }
+            } while (!inputReault);
+
+            return number;
+        }
+
         private int InputInt(string msg)
         {
             bool inputReault;
@@ -101,23 +121,32 @@
         {
             rnd = new Random();
 
-            Console.WriteLine("Введите координату по X(0..79) и по Y(0..19)");
-            int x = InputInt("X: ");
-            int y = InputInt("Y: ");
+            Console.WriteLine("Введите координату по X(1..19) и по Y(1..19)");
+            int x = InputInt("X: ", 20, 1) * 4;
+            int y = InputInt("Y: ", 20, 1);
 
             switch (key)
             {
                 case 'a':
-                    heros.Add(new Archer(rnd.Next(1, 3 + 1), x + 40, y));
-                    money -= 30;
+                    if (money >= 30)
+                    {
+                        heros.Add(new Archer(rnd.Next(1, 3 + 1), x + 40, y));
+                        money -= 30;
+                    }
                     break;
                 case 'k':
-                    heros.Add(new Knight(rnd.Next(1, 4 + 1), x + 40, y));
-                    money -= 20;
+                    if (money >= 20)
+                    {
+                        heros.Add(new Knight(rnd.Next(1, 4 + 1), x + 40, y));
+                        money -= 20;
+                    }
                     break;
                 case 'g':
-                    heros.Add(new Golem(rnd.Next(1, 3 + 1), x + 40, y));
-                    money -= 15;
+                    if (money >= 15)
+                    {
+                            heros.Add(new Golem(rnd.Next(1, 3 + 1), x + 40, y));
+                            money -= 15;
+                    }
                     break;
             }
 
@@ -126,7 +155,7 @@
 
         private void PLayerChoose(int money, List<Hero> hero, int numHero)
         {
-            while (money > 0)
+            while (money > 15)
             {
                 Console.Clear();
 
@@ -135,7 +164,7 @@
                 Console.SetCursorPosition(0, 0);
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("Archer: A(30p)\nGolem: G(20p)\nKhight: K(15)\n");
+                Console.WriteLine($"Money: {money} \nArcher: A(30p)\nGolem: G(20p)\nKhight: K(15)\n");
 
                 char choos2 = InputString($"Chosse hero {numHero}p: ");
 
@@ -171,7 +200,7 @@
             int y2 = _player2.GetHero()[num2].GetY();
             int x2 = _player2.GetHero()[num2].GetX() / 4;
 
-            radius = Convert.ToInt32(Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2)));
+            radius = (int)(Math.Sqrt(Math.Pow(x2 - x1, 2) + Math.Pow(y2 - y1, 2)));
 
             return radius;
         }
@@ -274,16 +303,28 @@
             {
                 Console.SetCursorPosition(i + 40, 0);
                 Console.Write('-');
-                Console.SetCursorPosition(i + 40, 19);
+                Console.SetCursorPosition(i + 40, 20);
                 Console.Write('-');
+
+                if (i % 16 == 0 && i != 0)
+                {
+                    Console.SetCursorPosition(i + 40, 0);
+                    Console.Write("|");
+                }
             }
 
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 21; i++)
             {
                 Console.SetCursorPosition(39, i);
                 Console.Write('|');
                 Console.SetCursorPosition(119, i);
                 Console.Write('|');
+
+                if (i % 4 == 0)
+                {
+                    Console.SetCursorPosition(39, i);
+                    Console.Write(i);
+                }
             }
         }
 
@@ -310,17 +351,17 @@
             return false;
         }
 
-        private void PlayerActions(PLayer player, int num) 
+        private void PlayerActions(PLayer player, int num)
         {
             bool check = num == 1;
 
-            for(int i = 0; i < 2; i++) 
+            for (int i = 0; i < 2; i++)
             {
                 WriteField();
                 Console.SetCursorPosition(0, 0);
                 int act = InputInt($"Действия: \n1: Ходить\n2: Атаковать\nВыберите действие за {num} персонажа: ");
 
-                switch (act) 
+                switch (act)
                 {
                     case 1:
                         Console.Clear();
@@ -332,7 +373,7 @@
 
                         int activePlayer = InputInt("Введите героя каким ходить: ");
 
-                        for(int j = 0; j < 5; j++)
+                        for (int j = 0; j < 5; j++)
                         {
                             WriteField();
                             ConsoleKey move = Console.ReadKey().Key;
@@ -378,11 +419,11 @@
 
                 PlayerActions(_player1, 1);
                 Console.Clear();
-                if (CheckDied(_player1) || CheckDied(_player2)) break;
+                if (!CheckDied(_player1) || !CheckDied(_player2)) break;
 
                 PlayerActions(_player2, 2);
                 Console.Clear();
-                if (CheckDied(_player1) || CheckDied(_player2)) break;
+                if (!CheckDied(_player1) || !CheckDied(_player2)) break;
 
                 Console.Clear();
                 WriteIndicators();
