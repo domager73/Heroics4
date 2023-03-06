@@ -59,10 +59,10 @@
             return number;
         }
 
-        private char InputString(string msg)
+        private char InputChar(string msg)
         {
             bool inputReault;
-            char str;
+            char chr;
 
             List<char> list = new List<char>(3) { 'a', 'k', 'g' };
 
@@ -70,16 +70,16 @@
 
             do
             {
-                inputReault = char.TryParse(Console.ReadLine(), out str);
+                inputReault = char.TryParse(Console.ReadLine(), out chr);
 
-                if (!list.Contains(str))
+                if (!list.Contains(chr))
                 {
                     inputReault = false;
                 }
             } while (!inputReault);
 
 
-            return str;
+            return chr;
         }
 
         private int ChoseKey(char key, List<Hero> heros, int money)
@@ -129,9 +129,9 @@
                 Console.SetCursorPosition(0, 0);
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine($"Money: {money} \nArcher: A(30p)\nGolem: G(20p)\nKhight: K(15)\n");
+                Console.WriteLine($"Money: {money} \nArcher: a(30p)\nGolem: g(20p)\nKhight: k(15)\n");
 
-                char choos2 = InputString($"Chosse hero {numHero}p: ");
+                char choos2 = InputChar($"Chosse hero {numHero}p: ");
 
                 money = ChoseKey(choos2, hero, money);
             }
@@ -337,15 +337,27 @@
                         Console.WriteLine($"Игрок под номером {num} Ходите");
 
                         int activePlayer = InputInt("Введите героя каким ходить: ");
+                        Console.WriteLine("Ходить на WASD");
 
                         for (int j = 0; j < 5; j++)
                         {
                             WriteField();
                             ConsoleKey move = Console.ReadKey().Key;
 
-                            player.GetHero()[activePlayer].Move(move);
+                            bool checkMove;
+                            do
+                            {
+                                checkMove = true;
 
-                            Console.Clear();
+                                if (move == ConsoleKey.A || move == ConsoleKey.S || move == ConsoleKey.W || move == ConsoleKey.D)
+                                {
+                                    player.GetHero()[activePlayer].Move(move);
+
+                                    checkMove = false;
+
+                                    Console.Clear();
+                                }
+                            } while (checkMove);
                         }
                         break;
 
@@ -383,12 +395,10 @@
                 WriteField();
 
                 PlayerActions(_player1, 1);
-                Console.Clear();
                 if (!CheckDied(_player1) || !CheckDied(_player2)) break;
 
                 PlayerActions(_player2, 2);
-                Console.Clear();
-                if (!CheckDied(_player1) || !CheckDied(_player2)) break;
+                if(!CheckDied(_player1) || !CheckDied(_player2));
 
                 Console.Clear();
                 WriteIndicators();

@@ -15,7 +15,7 @@ namespace Heroics4
         public PLayer()
         {
             _hero = new List<Hero>();
-            _money = 100;
+            _money = 30;
         }
 
         public bool GetWhich() => _which;
