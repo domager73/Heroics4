@@ -398,7 +398,7 @@
                 if (!CheckDied(_player1) || !CheckDied(_player2)) break;
 
                 PlayerActions(_player2, 2);
-                if(!CheckDied(_player1) || !CheckDied(_player2));
+                if(!CheckDied(_player1) || !CheckDied(_player2)) break;
 
                 Console.Clear();
                 WriteIndicators();
