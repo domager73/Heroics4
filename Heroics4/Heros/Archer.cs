@@ -4,28 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heroics4
+namespace Heroics4.Hero
 {
     class Archer : Hero
     {
-        private int _adBush;
+        private int _addBush;
 
         public Archer(int adBush, int x, int y) : base(10, 7, x, y, 'A', 100)
         {
-            _adBush = adBush;
+            _addBush = adBush;
         }
 
         public override void Fight(Hero hero)
         {
-            if (this.GetDamage() + _adBush >= hero.GetHp())
+            if (this.GetDamage() + _addBush >= hero.GetHp())
             {
                 hero.SetLive(true);
-                _adBush += 10;
+                _addBush += 10;
             }
             else
             {
-                hero.SetHp(hero.GetHp() - this.GetDamage() - _adBush);
-                _adBush += this.GetDamage() / 2;
+                hero.SetHp(hero.GetHp() - this.GetDamage() - _addBush);
+                _addBush += this.GetDamage() / 2;
             }
         }
     }

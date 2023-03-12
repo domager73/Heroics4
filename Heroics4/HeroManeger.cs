@@ -24,93 +24,35 @@
         #endregion
 
         #region SupportMethods
-        private int InputInt(string msg, int max, int min)
-        {
-            bool inputReault;
-            int number;
-
-            Console.Write(msg);
-
-            do
-            {
-                inputReault = int.TryParse(Console.ReadLine(), out number);
-
-                if (min > number || number > max)
-                {
-                    inputReault = false;
-                }
-            } while (!inputReault);
-
-            return number;
-        }
-
-        private int InputInt(string msg)
-        {
-            bool inputReault;
-            int number;
-
-            Console.Write(msg);
-
-            do
-            {
-                inputReault = int.TryParse(Console.ReadLine(), out number);
-            } while (!inputReault);
-
-            return number;
-        }
-
-        private char InputChar(string msg)
-        {
-            bool inputReault;
-            char chr;
-
-            List<char> list = new List<char>(3) { 'a', 'k', 'g' };
-
-            Console.Write(msg);
-
-            do
-            {
-                inputReault = char.TryParse(Console.ReadLine(), out chr);
-
-                if (!list.Contains(chr))
-                {
-                    inputReault = false;
-                }
-            } while (!inputReault);
-
-
-            return chr;
-        }
-
         private int ChoseKey(char key, List<Hero> heros, int money)
         {
             rnd = new Random();
 
             Console.WriteLine("Введите координату по X(1..19) и по Y(1..19)");
-            int x = InputInt("X: ", 20, 1) * 4;
-            int y = InputInt("Y: ", 20, 1);
+            int x = Util.InputInt("X: ", 20, 1) * 4;
+            int y = Util.InputInt("Y: ", 20, 1);
 
             switch (key)
             {
                 case 'a':
                     if (money >= 30)
                     {
-                        heros.Add(new Archer(rnd.Next(1, 3 + 1), x + 40, y));
+                        heros.Add(new Archer(2, x + 40, y));
                         money -= 30;
                     }
                     break;
                 case 'k':
                     if (money >= 20)
                     {
-                        heros.Add(new Knight(rnd.Next(1, 4 + 1), x + 40, y));
+                        heros.Add(new Knight(4, x + 40, y));
                         money -= 20;
                     }
                     break;
                 case 'g':
                     if (money >= 15)
                     {
-                            heros.Add(new Golem(rnd.Next(1, 3 + 1), x + 40, y));
-                            money -= 15;
+                        heros.Add(new Golem(3, x + 40, y));
+                        money -= 15;
                     }
                     break;
             }
@@ -129,11 +71,30 @@
                 Console.SetCursorPosition(0, 0);
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine($"Money: {money} \nArcher: a(30p)\nGolem: g(20p)\nKhight: k(15)\n");
 
-                char choos2 = InputChar($"Chosse hero {numHero}p: ");
+                SelectMenu();
+                int characterSelect = Util.InputInt("Выберите действие: ");
+                switch (characterSelect)
+                {
+                    case 2:
+                        Console.Clear();
+                        CharacterHero();
+                        Console.ReadKey();
+                        break;
+                    case 1:
+                        Console.Clear();
+                        WriteField();
+                        Console.SetCursorPosition(0, 0);
 
-                money = ChoseKey(choos2, hero, money);
+                        Console.WriteLine($"Money: {money}");
+                        Console.WriteLine($"Archer: a(30p)");
+                        Console.WriteLine($"Golem: g(15p)");
+                        Console.WriteLine($"Khight: k(20p)");
+
+                        char choos2 = Util.InputChar($"Chosse hero {numHero}p: ");
+                        money = ChoseKey(choos2, hero, money);
+                        break;
+                }
             }
         }
 
@@ -172,8 +133,8 @@
 
         private void FightHero(bool numPlayer)
         {
-            int attacking = InputInt("Выберете кем отаковать: ");
-            int defending = InputInt("Выберете кого отаковать: ");
+            int attacking = Util.InputInt("Выберете кем отаковать: ");
+            int defending = Util.InputInt("Выберете кого отаковать: ");
 
             if (numPlayer)
             {
@@ -224,7 +185,18 @@
         }
         #endregion
 
-        #region WriteField
+        #region Write
+        private void CharacterHero() 
+        {
+            Console.WriteLine($"Khignt:\nHp: 16\nDamage: 4\nAttack radius: 4\nArmot: 4\nMoney: 20\n");
+            Console.WriteLine($"Archer:\nHp: 10\nDamage: 7\nAttack radius: infinity\nAddDamage: 2\nMoney: 30\n");
+            Console.WriteLine($"Golem:\nHp: 15\nDamage: 5\nAttack radius: 3\nAddHealth: 3\nMoney: 15\n");
+        }
+        private void SelectMenu() 
+        {
+            Console.WriteLine("1: Купить персонажа");
+            Console.WriteLine("2: Посмотреть характеристики персонажей");
+        }
 
         private void WriteIndicators()
         {
@@ -324,7 +296,7 @@
             {
                 WriteField();
                 Console.SetCursorPosition(0, 0);
-                int act = InputInt($"Действия: \n1: Ходить\n2: Атаковать\nВыберите действие за {num} персонажа: ");
+                int act = Util.InputInt($"Действия: \n1: Ходить\n2: Атаковать\nВыберите действие за {num} персонажа: ");
 
                 switch (act)
                 {
@@ -336,7 +308,7 @@
                         Console.SetCursorPosition(0, 0);
                         Console.WriteLine($"Игрок под номером {num} Ходите");
 
-                        int activePlayer = InputInt("Введите героя каким ходить: ");
+                        int activePlayer = Util.InputInt("Введите героя каким ходить: ");
                         Console.WriteLine("Ходить на WASD");
 
                         for (int j = 0; j < 5; j++)
@@ -398,7 +370,7 @@
                 if (!CheckDied(_player1) || !CheckDied(_player2)) break;
 
                 PlayerActions(_player2, 2);
-                if(!CheckDied(_player1) || !CheckDied(_player2)) break;
+                if (!CheckDied(_player1) || !CheckDied(_player2)) break;
 
                 Console.Clear();
                 WriteIndicators();

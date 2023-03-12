@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heroics4
+namespace Heroics4.Hero
 {
-    class Golem : Hero
+    class Knight : Hero
     {
-        private int _adHp;
+        private int _armor;
 
-        public Golem(int adHp, int x, int y) : base(15, 5, x, y, 'G', 8)
+        public Knight(int armor, int x, int y) : base(16, 4, x, y, 'K', 4)
         {
-            _adHp = adHp;
+            _armor = armor;
         }
 
         public override void Fight(Hero hero)
@@ -20,21 +20,21 @@ namespace Heroics4
             if (this.GetDamage() >= hero.GetHp())
             {
                 hero.SetLive(true);
-                _adHp += 1;
+                _armor = 3;
             }
             else
             {
                 hero.SetHp(hero.GetHp() - this.GetDamage());
             }
 
-            if (hero.GetDamage() >= this.GetHp() + _adHp)
+            if (hero.GetDamage() > this.GetHp() + _armor)
             {
                 this.SetLive(true);
             }
             else
             {
-                this.SetHp(hero.GetHp() - this.GetDamage() - _adHp);
-                _adHp -= 1;
+                this.SetHp(hero.GetHp() - this.GetDamage() - _armor);
+                _armor -= 1;
             }
         }
     }

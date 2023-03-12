@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heroics4
+namespace Heroics4.Hero
 {
     abstract class Hero
     {
@@ -37,35 +37,35 @@ namespace Heroics4
             Console.Write(_look);
         }
 
-        public void Move(ConsoleKey move) 
+        public void Move(ConsoleKey move)
         {
-            switch (move) 
+            switch (move)
             {
                 case ConsoleKey.W:
-                    if (_y > 1) 
+                    if (_y > 1)
                     {
                         _y -= 1;
                     }
                     break;
                 case ConsoleKey.D:
-                    if (_x < 119) 
+                    if (_x < 119)
                     {
                         _x += 4;
                     }
                     break;
                 case ConsoleKey.S:
-                    if (_y < 19) 
+                    if (_y < 19)
                     {
                         _y += 1;
                     }
                     break;
                 case ConsoleKey.A:
-                    if (_x > 41) 
+                    if (_x > 41)
                     {
                         _x -= 4;
                     }
                     break;
-                    default: break;
+                default: break;
             }
         }
 
@@ -80,6 +80,6 @@ namespace Heroics4
         public void SetX(int x) => _x = x;
         public int GetY() => _y;
         public void SetY(int y) => _y = y;
-        public int GetRadius() => _attackRadius; 
+        public int GetRadius() => _attackRadius;
     }
 }
