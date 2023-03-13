@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heroics4.Hero
+namespace Heroics4.Heros.Hero
 {
     class Knight : Hero
     {
