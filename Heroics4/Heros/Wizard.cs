@@ -10,22 +10,22 @@ class Wizard : Hero
 {
     private int _dableDamage;
 
-    public Wizard(int dableDamage, int x, int y) : base(1,1,)
+    public Wizard(int dableDamage, int x, int y) : base(10, 12, x, y, 'W', 10)
     {
         _dableDamage = dableDamage;
     }
 
     public override void Fight(Hero hero)
     {
-        if (this.GetDamage() + _addBush >= hero.GetHp())
+        if (this.GetDamage() + _dableDamage >= hero.GetHp())
         {
             hero.SetLive(true);
-            _addBush += 10;
+            _dableDamage += 10;
         }
         else
         {
-            hero.SetHp(hero.GetHp() - this.GetDamage() - _addBush);
-            _addBush += this.GetDamage() / 2;
+            hero.SetHp(hero.GetHp() - this.GetDamage() - _dableDamage);
+            _dableDamage += this.GetDamage() / 2;
         }
     }
 }

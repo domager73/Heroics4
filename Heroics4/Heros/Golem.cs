@@ -4,43 +4,42 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heroics4.Heros
+namespace Heroics4.Heros;
+
+class Golem : Hero
 {
-    class Golem : Hero
+    private int _adHp;
+
+    public Golem(int adHp, int x, int y) : base(15, 5, x, y, 'G', 3)
     {
-        private int _adHp;
+        _adHp = adHp;
+    }
 
-        public Golem(int adHp, int x, int y) : base(15, 5, x, y, 'G', 3)
+    public override void Fight(Hero hero)
+    {
+        if (this.GetDamage() >= hero.GetHp())
         {
-            _adHp = adHp;
+            hero.SetLive(true);
+            _adHp += 1;
+        }
+        else
+        {
+            hero.SetHp(hero.GetHp() - this.GetDamage());
         }
 
-        public override void Fight(Hero hero)
+        if (hero.GetDamage() >= this.GetHp() + _adHp)
         {
-            if (this.GetDamage() >= hero.GetHp())
-            {
-                hero.SetLive(true);
-                _adHp += 1;
-            }
-            else
-            {
-                hero.SetHp(hero.GetHp() - this.GetDamage());
-            }
-
-            if (hero.GetDamage() >= this.GetHp() + _adHp)
-            {
-                this.SetLive(true);
-            }
-            else
-            {
-                this.SetHp(hero.GetHp() - this.GetDamage() - _adHp);
-                _adHp -= 1;
-            }
+            this.SetLive(true);
         }
-
-        public override string ToString()
+        else
         {
-            return $"Hp: {this.GetHp}\nDamage: {this.GetDamage}\nAttack radius: {this.GetRadius}\nAddHealth: {_adHp}";
+            this.SetHp(hero.GetHp() - this.GetDamage() - _adHp);
+            _adHp -= 1;
         }
+    }
+
+    public override string ToString()
+    {
+        return $"Hp: {this.GetHp}\nDamage: {this.GetDamage}\nAttack radius: {this.GetRadius}\nAddHealth: {_adHp}";
     }
 }
