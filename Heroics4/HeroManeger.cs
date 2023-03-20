@@ -1,4 +1,6 @@
-﻿namespace Heroics4
+﻿using Heroics4.Heros;
+
+namespace Heroics4
 {
     class HeroManeger
     {

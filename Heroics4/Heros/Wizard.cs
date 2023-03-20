@@ -4,29 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heroics4.Heros.Hero
+namespace Heroics4.Heros;
+
+class Wizard : Hero
 {
-    class Wizard : Hero
+    private int _dableDamage;
+
+    public Wizard(int dableDamage, int x, int y) : base(1,1,)
     {
-        private int _dableDamage;
+        _dableDamage = dableDamage;
+    }
 
-        public Wizard(int dableDamage, int x, int y) : base(1,1,)
+    public override void Fight(Hero hero)
+    {
+        if (this.GetDamage() + _addBush >= hero.GetHp())
         {
-            _dableDamage = dableDamage;
+            hero.SetLive(true);
+            _addBush += 10;
         }
-
-        public override void Fight(Hero hero)
+        else
         {
-            if (this.GetDamage() + _addBush >= hero.GetHp())
-            {
-                hero.SetLive(true);
-                _addBush += 10;
-            }
-            else
-            {
-                hero.SetHp(hero.GetHp() - this.GetDamage() - _addBush);
-                _addBush += this.GetDamage() / 2;
-            }
+            hero.SetHp(hero.GetHp() - this.GetDamage() - _addBush);
+            _addBush += this.GetDamage() / 2;
         }
     }
 }

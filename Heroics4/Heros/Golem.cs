@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heroics4.Heros.Hero
+namespace Heroics4.Heros
 {
     class Golem : Hero
     {

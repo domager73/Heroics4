@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Heroics4.Heros
+namespace Heroics4.Hero
 {
     abstract class Hero
     {
