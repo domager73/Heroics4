@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ namespace Heroics4
         private List<Hero> _hero;
         private int _money;
         private bool _which;
+        private int _id;
 
         public PLayer()
         {
@@ -19,11 +21,11 @@ namespace Heroics4
             _money = 30;
         }
 
-        public bool GetWhich() => _which;
-        public void SetWhich(bool which) => _which = which;
         public int GetMoney() => _money;
         public void SetMoney(int money) => _money = money;
         public List<Hero> GetHero() => _hero;
+        public int GetId() => _id;
+        public void SetId(int id) => _id = id;
 
         public override string ToString()
         {

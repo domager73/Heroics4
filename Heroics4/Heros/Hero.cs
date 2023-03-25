@@ -69,7 +69,7 @@ abstract class Hero
         }
     }
 
-    public virtual void Fight(Hero hero) { }
+    public abstract void Fight(Hero hero);
 
     public int GetHp() => _hp;
     public void SetLive(bool live) => _live = live;

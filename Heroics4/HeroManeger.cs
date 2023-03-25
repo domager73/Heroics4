@@ -1,8 +1,9 @@
 ﻿using Heroics4.Heros;
+using System.Numerics;
 
 namespace Heroics4
 {
-    class HeroManeger
+    class HeroManager
     {
         #region Variable
 
@@ -15,13 +16,13 @@ namespace Heroics4
 
         #region CreateMethods
 
-        public HeroManeger()
+        public HeroManager()
         {
             _player1 = new PLayer();
-            _player1.SetWhich(true);
+            _player1.SetId(1);
 
             _player2 = new PLayer();
-            _player2.SetWhich(false);
+            _player2.SetId(2);
         }
         #endregion
 
@@ -100,23 +101,12 @@ namespace Heroics4
             }
         }
 
-        private void CheckDied(int number, bool whichPl)
+        private void CheckDied(int number, PLayer player)
         {
-            if (whichPl)
+            if (player.GetHero()[number].GetHp() <= 0)
             {
-                if (_player1.GetHero()[number].GetHp() <= 0)
-                {
-                    _player1.GetHero().RemoveAt(number);
-                    _player1.GetHero()[number].SetLive(true);
-                }
-            }
-            else
-            {
-                if (_player2.GetHero()[number].GetHp() <= 0)
-                {
-                    _player2.GetHero().RemoveAt(number);
-                    _player2.GetHero()[number].SetLive(true);
-                }
+                player.GetHero().RemoveAt(number);
+                player.GetHero()[number].SetLive(true);
             }
         }
 
@@ -133,44 +123,26 @@ namespace Heroics4
             return radius;
         }
 
-        private void FightHero(bool numPlayer)
+        private void FightHero(PLayer attackingP, PLayer defendingP)
         {
             int attacking = Util.InputInt("Выберете кем отаковать: ");
             int defending = Util.InputInt("Выберете кого отаковать: ");
 
-            if (numPlayer)
+            if (_player1.GetHero()[attacking].GetRadius() >= CalculatonAttackRadius(attacking, defending))
             {
-                if (_player1.GetHero()[attacking].GetRadius() >= CalculatonAttackRadius(attacking, defending))
-                {
-                    _player1.GetHero()[attacking].Fight(_player2.GetHero()[defending]);
+                _player1.GetHero()[attacking].Fight(_player2.GetHero()[defending]);
 
-                    CheckDied(defending, false);
+                CheckDied(defending, _player2);
 
-                    CheckDied(attacking, true);
-                }
-                else
-                {
-                    Console.WriteLine("Герою из команды 1 нехватило аттаки");
-                }
+                CheckDied(attacking, _player1);
             }
             else
             {
-                if (_player2.GetHero()[attacking].GetRadius() >= CalculatonAttackRadius(attacking, defending) && !numPlayer)
-                {
-                    _player2.GetHero()[attacking].Fight(_player1.GetHero()[defending]);
-
-                    CheckDied(attacking, false);
-
-                    CheckDied(defending, true);
-                }
-                else
-                {
-                    Console.WriteLine("Герою из команды 2 нехватило аттаки");
-                }
+                Console.WriteLine("Герою нехватило радиуса аттаки");
             }
         }
 
-        private void Vinner()
+        private void Winner()
         {
             if (!CheckDied(_player1) && !CheckDied(_player2))
             {
@@ -178,23 +150,23 @@ namespace Heroics4
             }
             else if (CheckDied(_player1))
             {
-                Console.WriteLine("ВЫйграл 1 игрок!!!!!");
+                Console.WriteLine("Выйграл 1 игрок!!!!!");
             }
             else if (CheckDied(_player2))
             {
-                Console.WriteLine("ВЫйграл 2 игрок!!!!!!!!!!!!!");
+                Console.WriteLine("Выйграл 2 игрок!!!!!!!!!!!!!");
             }
         }
         #endregion
 
         #region Write
-        private void CharacterHero() 
+        private void CharacterHero()
         {
             Console.WriteLine($"Khignt:\nHp: 16\nDamage: 4\nAttack radius: 4\nArmot: 4\nMoney: 20\n");
             Console.WriteLine($"Archer:\nHp: 10\nDamage: 7\nAttack radius: infinity\nAddDamage: 2\nMoney: 30\n");
             Console.WriteLine($"Golem:\nHp: 15\nDamage: 5\nAttack radius: 3\nAddHealth: 3\nMoney: 15\n");
         }
-        private void SelectMenu() 
+        private void SelectMenu()
         {
             Console.WriteLine("1: Купить персонажа");
             Console.WriteLine("2: Посмотреть характеристики персонажей");
@@ -270,7 +242,7 @@ namespace Heroics4
         #endregion
 
         #region LogicMethods
-        private void ChoosHeroes()
+        private void ChooseHeroes()
         {
             PLayerChoose(_player1.GetMoney(), _player1.GetHero(), 1);
 
@@ -290,15 +262,37 @@ namespace Heroics4
             return false;
         }
 
-        private void PlayerActions(PLayer player, int num)
+        private void MoveHero(PLayer attackingP, int activePlayer) 
         {
-            bool check = num == 1;
+            for (int j = 0; j < 5; j++)
+            {
+                WriteField();
+                ConsoleKey move = Console.ReadKey().Key;
 
+                bool checkMove;
+                do
+                {
+                    checkMove = true;
+
+                    if (move == ConsoleKey.A || move == ConsoleKey.S || move == ConsoleKey.W || move == ConsoleKey.D)
+                    {
+                        attackingP.GetHero()[activePlayer].Move(move);
+
+                        checkMove = false;
+
+                        Console.Clear();
+                    }
+                } while (checkMove);
+            }
+        }
+
+        private void PlayerActions(PLayer attackingP, PLayer defendingP)
+        {
             for (int i = 0; i < 2; i++)
             {
                 WriteField();
                 Console.SetCursorPosition(0, 0);
-                int act = Util.InputInt($"Действия: \n1: Ходить\n2: Атаковать\nВыберите действие за {num} персонажа: ");
+                int act = Util.InputInt($"Действия: \n1: Ходить\n2: Атаковать\nВыберите действие за {attackingP.GetId()} персонажа: ");
 
                 switch (act)
                 {
@@ -308,31 +302,13 @@ namespace Heroics4
                         WriteField();
 
                         Console.SetCursorPosition(0, 0);
-                        Console.WriteLine($"Игрок под номером {num} Ходите");
+                        Console.WriteLine($"Игрок под номером {attackingP.GetId()} Ходите");
 
                         int activePlayer = Util.InputInt("Введите героя каким ходить: ");
                         Console.WriteLine("Ходить на WASD");
 
-                        for (int j = 0; j < 5; j++)
-                        {
-                            WriteField();
-                            ConsoleKey move = Console.ReadKey().Key;
+                        MoveHero(attackingP, activePlayer);
 
-                            bool checkMove;
-                            do
-                            {
-                                checkMove = true;
-
-                                if (move == ConsoleKey.A || move == ConsoleKey.S || move == ConsoleKey.W || move == ConsoleKey.D)
-                                {
-                                    player.GetHero()[activePlayer].Move(move);
-
-                                    checkMove = false;
-
-                                    Console.Clear();
-                                }
-                            } while (checkMove);
-                        }
                         break;
 
                     case 2:
@@ -341,8 +317,8 @@ namespace Heroics4
                         WriteField();
 
                         Console.SetCursorPosition(0, 0);
-                        Console.WriteLine($"Атакует {num} игрок");
-                        FightHero(check);
+                        Console.WriteLine($"Атакует {attackingP.GetId()} игрок");
+                        FightHero(attackingP, defendingP);
 
                         Console.Clear();
                         break;
@@ -352,7 +328,7 @@ namespace Heroics4
 
         public void Play()
         {
-            ChoosHeroes();
+            ChooseHeroes();
             Console.Clear();
 
             WriteField();
@@ -368,10 +344,10 @@ namespace Heroics4
             {
                 WriteField();
 
-                PlayerActions(_player1, 1);
+                PlayerActions(_player1, _player2);
                 if (!CheckDied(_player1) || !CheckDied(_player2)) break;
 
-                PlayerActions(_player2, 2);
+                PlayerActions(_player2, _player1);
                 if (!CheckDied(_player1) || !CheckDied(_player2)) break;
 
                 Console.Clear();
@@ -383,7 +359,7 @@ namespace Heroics4
                 Console.Clear();
             }
 
-            Vinner();
+            Winner();
         }
         #endregion
     }

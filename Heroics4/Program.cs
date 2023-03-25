@@ -1,7 +1,11 @@
-﻿using Heroics4;
+﻿//using Heroics4;
 
-HeroManeger manager = new HeroManeger();
+//HeroManager manager = new HeroManager();
 
-manager.Play();
+//manager.Play();
 
-Console.ReadLine();
+//Console.ReadLine();
+
+string str = "1010101010";
+
+Console.WriteLine(str.IsNormalized());

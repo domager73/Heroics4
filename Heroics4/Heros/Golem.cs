@@ -37,9 +37,4 @@ class Golem : Hero
             _adHp -= 1;
         }
     }
-
-    public override string ToString()
-    {
-        return $"Hp: {this.GetHp}\nDamage: {this.GetDamage}\nAttack radius: {this.GetRadius}\nAddHealth: {_adHp}";
-    }
 }
